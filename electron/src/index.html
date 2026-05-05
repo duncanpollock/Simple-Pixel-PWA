@@ -57,7 +57,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0c0c0f}
 <div id="crash"></div>
 <div id="app">
   <div class="topbar">
-    <span style="font-size:13px;font-weight:bold;color:#4fc3f7;letter-spacing:3px;margin-right:4px">PIXELCRAFT</span>
+    <span style="font-size:13px;font-weight:bold;color:#4fc3f7;letter-spacing:3px;margin-right:4px">SIMPLE PIXEL</span>
     <div style="width:1px;height:16px;background:#2a2a38"></div>
     <button class="abtn" id="btn-new">New</button>
     <button class="abtn" id="btn-open">Open</button>
@@ -511,11 +511,11 @@ function fromJSON(json){
 async function saveProject(){
   var json=toJSON();
   var b64='data:application/json;base64,'+btoa(unescape(encodeURIComponent(json)));
-  await saveFile(b64,'my-art.pixelcraft',[{name:'PixelCraft',extensions:['pixelcraft','json']}]);
+  await saveFile(b64,'my-art.simpix',[{name:'Simple Pixel',extensions:['simpix','json']}]);
 }
 async function openProject(){
   if(window.electronAPI){
-    var res=await window.electronAPI.openFile({filters:[{name:'PixelCraft',extensions:['pixelcraft','json']}]});
+    var res=await window.electronAPI.openFile({filters:[{name:'Simple Pixel',extensions:['simpix','json']}]});
     if(!res||!res.success)return;
     try{
       var json=decodeURIComponent(escape(atob(res.data)));
@@ -523,7 +523,7 @@ async function openProject(){
       sizeCanvas();initHistory();render();setStatus('Opened');
     }catch(e){setStatus('Error: '+e.message);}
   } else {
-    var inp=document.createElement('input');inp.type='file';inp.accept='.pixelcraft,.json';
+    var inp=document.createElement('input');inp.type='file';inp.accept='.simpix,.json';
     inp.onchange=async function(){
       var f=inp.files[0];if(!f)return;
       var text=await f.text();
