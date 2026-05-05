@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Simple Pixel v1.1</title>
+<title>Simple Pixel</title>
 <!-- @@PLATFORM_HEAD@@ -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -12,7 +12,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#0c0c0f}
 .topbar{display:flex;align-items:center;gap:6px;padding:6px 12px;background:#111116;border-bottom:1px solid #1e1e28;flex-shrink:0}
 .body{display:flex;flex:1;overflow:hidden}
 .tools{width:46px;background:#111116;border-right:1px solid #1e1e28;padding:5px 4px;display:flex;flex-direction:column;gap:2px;flex-shrink:0;overflow-y:auto}
-.canvas-area{flex:1;overflow:auto;background:#0c0c0f}
+.canvas-area{flex:1;overflow:auto;background:#0c0c0f;touch-action:none}
 #canvas-wrap{min-width:100%;min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px;}
 .right{width:200px;background:#111116;border-left:1px solid #1e1e28;display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
 .panel{padding:8px 9px;border-bottom:1px solid #1e1e28}
@@ -600,7 +600,7 @@ document.getElementById('btn-swap').addEventListener('click', function(){var t=p
 document.getElementById('btn-add-color').addEventListener('click', function(){if(!palette.includes(primaryColor)){palette.push(primaryColor);renderPalette();setStatus('Added '+primaryColor);}});
 
 // ── Mouse events ──────────────────────────────────────────────────
-mc.addEventListener('mousedown', function(e){
+mc.addEventListener('pointerdown', function(e){
   e.preventDefault();
   var pos=canvasXY(e),x=pos.x,y=pos.y;
   var useAlt=e.button===2;
@@ -611,12 +611,12 @@ mc.addEventListener('mousedown', function(e){
     return;
   }
   if(tool==='fill'){saveHistory();floodFill(curL().c,x,y,col);redraw();updatePreview();updateThumb(frameIdx);return;}
-  if(tool==='move'){movePt={x:x,y:y};moveSnap=dupC(curL().c);isDrawing=true;return;}
-  saveHistory();isDrawing=true;startPt={x:x,y:y};lastPt=null;
+  if(tool==='move'){movePt={x:x,y:y};moveSnap=dupC(curL().c);isDrawing=true;mc.setPointerCapture(e.pointerId);return;}
+  saveHistory();isDrawing=true;startPt={x:x,y:y};lastPt=null;mc.setPointerCapture(e.pointerId);
   if(tool==='line'||tool==='rect'||tool==='ellipse'){snapData=curL().c.getContext('2d').getImageData(0,0,W,H);}
   stroke(x,y,true);
 });
-mc.addEventListener('mousemove', function(e){
+mc.addEventListener('pointermove', function(e){
   var pos=canvasXY(e);document.getElementById('cursor-pos').textContent=pos.x+', '+pos.y;
   if(!isDrawing)return;
   var x=pos.x,y=pos.y;
@@ -635,7 +635,7 @@ mc.addEventListener('mousemove', function(e){
     setPx(l.c,expandBrush(pts),primaryColor,false);redraw();
   }
 });
-mc.addEventListener('mouseup', function(e){
+mc.addEventListener('pointerup', function(e){
   if(!isDrawing)return;isDrawing=false;
   var pos=canvasXY(e),x=pos.x,y=pos.y;
   if(tool==='move'){movePt=null;moveSnap=null;updatePreview();updateThumb(frameIdx);return;}
@@ -652,7 +652,7 @@ mc.addEventListener('mouseup', function(e){
   redraw();updatePreview();updateThumb(frameIdx);
   lastPt=null;startPt=null;snapData=null;
 });
-mc.addEventListener('mouseleave', function(){document.getElementById('cursor-pos').textContent='—';if(isDrawing){isDrawing=false;updatePreview();updateThumb(frameIdx);}});
+mc.addEventListener('pointerleave', function(){document.getElementById('cursor-pos').textContent='—';if(isDrawing){isDrawing=false;updatePreview();updateThumb(frameIdx);}});
 mc.addEventListener('contextmenu', function(e){e.preventDefault();});
 mc.addEventListener('wheel', function(e){
   e.preventDefault();
