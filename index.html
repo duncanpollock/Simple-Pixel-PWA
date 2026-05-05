@@ -509,11 +509,11 @@ function fromJSON(json){
 async function saveProject(){
   var json=toJSON();
   var b64='data:application/json;base64,'+btoa(unescape(encodeURIComponent(json)));
-  await saveFile(b64,'my-art.pixelcraft',[{name:'PixelCraft',extensions:['pixelcraft','json']}]);
+  await saveFile(b64,'my-art.simpix',[{name:'Simple Pixel',extensions:['simpix','json']}]);
 }
 async function openProject(){
   if(window.electronAPI){
-    var res=await window.electronAPI.openFile({filters:[{name:'PixelCraft',extensions:['pixelcraft','json']}]});
+    var res=await window.electronAPI.openFile({filters:[{name:'Simple Pixel',extensions:['simpix','json']}]});
     if(!res||!res.success)return;
     try{
       var json=decodeURIComponent(escape(atob(res.data)));
@@ -521,7 +521,7 @@ async function openProject(){
       sizeCanvas();initHistory();render();setStatus('Opened');
     }catch(e){setStatus('Error: '+e.message);}
   } else {
-    var inp=document.createElement('input');inp.type='file';inp.accept='.pixelcraft,.json';
+    var inp=document.createElement('input');inp.type='file';inp.accept='.simpix,.json';
     inp.onchange=async function(){
       var f=inp.files[0];if(!f)return;
       var text=await f.text();
