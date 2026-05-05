@@ -1,5 +1,5 @@
 electron/node_modules
-/dist
-/build
-/Release
-/Debug
+electron/dist
+electron/build
+electron/Release
+electron/Debug
