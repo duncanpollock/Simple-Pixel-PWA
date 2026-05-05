@@ -1,0 +1,13 @@
+{
+  "name": "simplepixel",
+  "version": "1.0.0",
+  "description": "Simple Pixel – pixel art editor. Shared source for Electron and PWA.",
+  "private": true,
+  "scripts": {
+    "build":         "node build.js",
+    "build:electron":"node build.js electron",
+    "build:pwa":     "node build.js pwa",
+    "electron":      "node build.js electron && npm start --prefix electron",
+    "start":         "node build.js electron && npm start --prefix electron"
+  }
+}

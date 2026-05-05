@@ -1,54 +1,70 @@
-# Simple Pixel – PWA
+# Simple Pixel
 
-A Progressive Web App version of Simple Pixel that installs directly from Safari
-on iPad (and any browser on any device) with no App Store required.
+A pixel art editor for classrooms — one shared codebase, two platforms.
 
-## Deploying to GitHub Pages (free hosting)
+```
+simplepixel/
+├── shared/
+│   └── editor.html       ← THE ONLY FILE YOU EDIT
+├── build.js              ← assembles platform outputs
+├── electron/
+│   ├── main.js           ← Electron window / menus / IPC
+│   ├── preload.js        ← Electron API bridge
+│   ├── package.json      ← Electron + electron-builder config
+│   ├── build/icons/      ← App icon
+│   └── src/index.html    ← GENERATED — do not edit
+└── pwa/
+    ├── manifest.json     ← PWA identity
+    ├── sw.js             ← Service worker (offline)
+    ├── icons/            ← PWA icons
+    └── index.html        ← GENERATED — do not edit
+```
 
-1. Create a new **public** repository on GitHub — e.g. `simple-pixel`
-2. Push this folder's contents to the `main` branch:
-   ```bash
-   git init
-   git add .
-   git commit -m "Simple Pixel PWA"
-   git remote add origin https://github.com/YOUR_USERNAME/simple-pixel.git
-   git push -u origin main
-   ```
-3. Go to **Settings → Pages** in your repository
-4. Under *Source*, select `main` branch and `/ (root)` folder → Save
-5. GitHub will give you a URL like `https://your-username.github.io/simple-pixel/`
+## Workflow
 
-That's it. The app is now live and installable.
+**Edit** `shared/editor.html` — this is the single source of truth for all
+UI, CSS, and editor logic.
 
-## Installing on iPad
+**Build both platforms:**
+```bash
+node build.js
+```
 
-1. Open the URL in **Safari** (must be Safari for iOS/iPadOS install)
-2. Tap the **Share** button (box with arrow)
-3. Tap **Add to Home Screen**
-4. Tap **Add**
+**Build one platform:**
+```bash
+node build.js electron
+node build.js pwa
+```
 
-The app will appear on the home screen, launch fullscreen in landscape,
-and work completely **offline** after the first visit.
+## Running Electron
+
+```bash
+cd electron
+npm install       # first time only
+npm start
+```
+
+Or from the root:
+```bash
+npm start         # builds + launches Electron
+```
+
+## Distributing
+
+```bash
+cd electron
+npm run dist:mac    # → dist/Simple Pixel.dmg
+npm run dist:win    # → dist/Simple Pixel Setup.exe
+npm run dist:linux  # → dist/Simple Pixel.AppImage
+```
+
+## Deploying PWA (iPad)
+
+Push the `pwa/` folder to GitHub Pages. See `pwa/README.md`.
 
 ## Updating the app
 
-After making changes, push to GitHub. Students will get the update
-automatically next time they open the app while connected to the internet.
-To force an update, increment `CACHE_VERSION` in `sw.js`:
-```js
-const CACHE_VERSION = 'simplepixel-v2';  // bump this
-```
-
-## File structure
-
-```
-simplepixel-pwa/
-├── index.html      ← entire app (HTML + CSS + JS)
-├── manifest.json   ← PWA identity, icons, display mode
-├── sw.js           ← service worker (offline caching)
-└── icons/          ← app icons for all device sizes
-    ├── apple-touch-icon.png   (180×180, iOS home screen)
-    ├── icon-192.png           (Android / PWA standard)
-    ├── icon-512.png           (splash screen / store listing)
-    └── ...
-```
+1. Edit `shared/editor.html`
+2. Run `node build.js`
+3. Test with `npm start`
+4. For PWA: push `pwa/` to GitHub, bump `CACHE_VERSION` in `pwa/sw.js`

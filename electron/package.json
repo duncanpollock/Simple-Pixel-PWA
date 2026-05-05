@@ -1,0 +1,51 @@
+{
+  "name": "pixelcraft",
+  "version": "1.0.0",
+  "description": "PixelCraft – a pixel art editor for classrooms",
+  "main": "main.js",
+  "author": "Your Name / School",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist":       "electron-builder",
+    "dist:mac":   "electron-builder --mac",
+    "dist:win":   "electron-builder --win",
+    "dist:linux": "electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.classroom.pixelcraft",
+    "productName": "PixelCraft",
+    "copyright": "Copyright © 2025",
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "build/icons/**/*"
+    ],
+    "directories": { "output": "dist" },
+    "mac": {
+      "icon": "build/icons/icon.png",
+      "category": "public.app-category.graphics-design",
+      "target": [{ "target": "dmg", "arch": ["universal"] }]
+    },
+    "win": {
+      "icon": "build/icons/icon.png",
+      "target": [{ "target": "nsis", "arch": ["x64"] }]
+    },
+    "linux": {
+      "icon": "build/icons/icon.png",
+      "category": "Graphics",
+      "target": [
+        { "target": "AppImage", "arch": ["x64"] },
+        { "target": "deb",      "arch": ["x64"] }
+      ]
+    },
+    "nsis":  { "oneClick": true, "perMachine": false },
+    "dmg":   { "title": "Install PixelCraft" }
+  },
+  "devDependencies": {
+    "electron": "^36.0.0",
+    "electron-builder": "^26.0.12"
+  }
+}
