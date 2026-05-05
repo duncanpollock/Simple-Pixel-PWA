@@ -32,7 +32,7 @@ const PLATFORMS = {
   },
 
   pwa: {
-    out: path.join(__dirname, 'pwa', 'index.html'),
+    out: path.join(__dirname, 'docs', 'index.html'),
     head: `
   <!-- PWA / iOS meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,7 +66,7 @@ const toBuild = target ? [target] : Object.keys(PLATFORMS);
 for (const name of toBuild) {
   const platform = PLATFORMS[name];
   if (!platform) {
-    console.error(`Unknown platform: ${name}. Use 'electron' or 'pwa'.`);
+    console.error(`Unknown platform: ${name}. Use 'electron' or 'docs'.`);
     process.exit(1);
   }
 
